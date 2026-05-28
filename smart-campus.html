@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Nova Campus Grid</title>
+<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=Sora:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#f3f6ff;--bg-2:#edf7ff;--ink:#0f172a;--muted:#5b6b88;--card:#ffffff;--line:#d8e2ff;
+  --brand:#2563eb;--brand-2:#06b6d4;--ok:#16a34a;--warn:#d97706;--bad:#dc2626;--vio:#7c3aed;
+  --mono:'Rajdhani',sans-serif;--font:'Sora',sans-serif;
+}
+body.dark{
+  --bg:#070b18;--bg-2:#0d1326;--ink:#e6ecff;--muted:#9aa8cc;--card:#111935;--line:#1f2c52;
+  --brand:#60a5fa;--brand-2:#22d3ee;--ok:#4ade80;--warn:#fbbf24;--bad:#f87171;--vio:#a78bfa;
+}
+body{
+  min-height:100vh;font-family:var(--font);color:var(--ink);overflow-x:hidden;
+  background:
+    radial-gradient(circle at 10% -10%, color-mix(in srgb, var(--brand) 20%, transparent), transparent 30%),
+    radial-gradient(circle at 90% 10%, color-mix(in srgb, var(--brand-2) 26%, transparent), transparent 35%),
+    linear-gradient(130deg,var(--bg),var(--bg-2));
+  transition:background .45s ease,color .35s ease;
+}
+header{
+  position:sticky;top:0;z-index:100;height:68px;padding:0 1.2rem;display:flex;align-items:center;
+  border-bottom:1px solid var(--line);backdrop-filter:blur(12px);background:color-mix(in srgb, var(--bg) 82%, transparent);
+}
+.top-nav{width:100%;display:flex;align-items:center;justify-content:space-between;gap:1rem}
+.brand{display:flex;align-items:center;gap:.65rem;min-width:220px}
+.brand-badge{
+  width:34px;height:34px;border-radius:10px;display:grid;place-items:center;font:800 .95rem var(--mono);
+  color:#fff;background:linear-gradient(135deg,var(--brand),var(--brand-2));
+  box-shadow:0 8px 18px color-mix(in srgb,var(--brand) 45%,transparent);
+}
+.brand-text{font:800 1.88rem/1 var(--mono);letter-spacing:.3px}
+.top-links{display:flex;align-items:center;gap:.2rem}
+.top-link{
+  border:none;background:transparent;color:var(--muted);cursor:pointer;padding:.5rem .78rem;border-radius:10px;
+  font:700 1rem var(--font);transition:all .2s ease;
+}
+.top-link:hover{color:var(--ink);background:color-mix(in srgb,var(--brand) 10%,transparent)}
+.top-link.active{color:var(--ink);background:color-mix(in srgb,var(--brand) 16%,transparent)}
+.right-tools{display:flex;align-items:center;gap:.65rem;min-width:220px;justify-content:flex-end}
+.theme-btn{
+  border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:999px;width:38px;height:38px;
+  display:grid;place-items:center;padding:0;font:700 .9rem var(--mono);letter-spacing:.5px;cursor:pointer;
+  transition:all .25s ease;
+}
+.theme-btn:hover{border-color:var(--brand);color:var(--brand);transform:translateY(-1px)}
+.cta-btn{
+  border:none;border-radius:12px;padding:.65rem 1.05rem;font:800 .96rem var(--font);cursor:pointer;color:#fff;
+  background:linear-gradient(135deg,#3b82f6,#2563eb);transition:all .22s ease;
+}
+.cta-btn:hover{transform:translateY(-1px);filter:brightness(1.08)}
+main{max-width:1040px;margin:0 auto;padding:1.35rem}
+.page{display:none}
+.page.active{display:block;animation:pageIn .45s cubic-bezier(.2,.8,.2,1)}
+@keyframes pageIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+.ph{margin-bottom:1.2rem}
+.ph-lab{font:700 .67rem var(--mono);letter-spacing:2px;color:var(--brand);text-transform:uppercase}
+.ph-title{font:800 1.6rem var(--font);margin-top:.2rem}
+.ph-desc{font-size:.86rem;color:var(--muted);margin-top:.36rem;line-height:1.62}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(148px,1fr));gap:.8rem;margin-bottom:1rem}
+.stat{border:1px solid var(--line);background:var(--card);border-radius:14px;padding:.88rem;transition:transform .25s ease,border-color .25s ease}
+.stat:hover{transform:translateY(-2px);border-color:color-mix(in srgb,var(--brand) 45%,var(--line))}
+.stat-v{font:800 1.35rem var(--mono);color:var(--vio)}
+.stat-l{font-size:.72rem;color:var(--muted);margin-top:.18rem}
+.card{
+  border:1px solid var(--line);background:var(--card);border-radius:16px;padding:1rem;margin-bottom:1rem;
+  box-shadow:0 14px 32px color-mix(in srgb,var(--brand) 8%,transparent);transition:transform .25s ease;
+}
+.card:hover{transform:translateY(-1px)}
+.card-head{font:700 .68rem var(--mono);letter-spacing:1.8px;text-transform:uppercase;color:var(--muted);margin-bottom:.85rem}
+label{display:block;font-size:.78rem;font-weight:700;color:var(--muted);margin-bottom:.32rem}
+input,select,textarea{
+  width:100%;padding:.62rem .74rem;border-radius:11px;border:1px solid var(--line);background:color-mix(in srgb,var(--card) 90%,#ffffff 10%);
+  color:var(--ink);font-size:.9rem;font-family:var(--font);outline:none;margin-bottom:.9rem;transition:all .2s ease;
+}
+input:focus,select:focus,textarea:focus{border-color:var(--brand);box-shadow:0 0 0 3px color-mix(in srgb,var(--brand) 20%,transparent)}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:.8rem}
+.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:.8rem}
+.btns{display:flex;flex-wrap:wrap;gap:.5rem}
+.btn{
+  border:none;border-radius:11px;padding:.52rem .95rem;font-size:.83rem;font-weight:800;cursor:pointer;
+  transition:all .22s cubic-bezier(.2,.8,.2,1)
+}
+.btn:hover{transform:translateY(-1px)}
+.btn-g{background:linear-gradient(135deg,var(--brand),var(--brand-2));color:#fff}
+.btn-b{background:var(--card);color:var(--ink);border:1px solid var(--line)}
+.btn-r{background:color-mix(in srgb,var(--bad) 10%,transparent);color:var(--bad);border:1px solid color-mix(in srgb,var(--bad) 35%,var(--line))}
+.btn-sm{padding:.31rem .68rem;font-size:.76rem}
+.term{
+  background:#0a1024;border:1px solid #1f2e5e;border-radius:13px;padding:.9rem 1rem;min-height:82px;
+  color:#d9e6ff;font:500 .78rem ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;line-height:1.78;white-space:pre-wrap;word-break:break-word;
+}
+.term .c-blue{color:#93c5fd}.term .c-muted{color:#94a3b8}.term .c-warn{color:#fcd34d}.term .c-err{color:#fca5a5}.term .c-pink{color:#c4b5fd}
+.dash-grid{display:grid;grid-template-columns:1fr 1fr;gap:.85rem}
+.mod-card{
+  border:1px solid var(--line);border-radius:14px;padding:.95rem;cursor:pointer;background:linear-gradient(160deg,color-mix(in srgb,var(--card) 86%,#fff),var(--card));
+  border-top:3px solid var(--c1);transition:all .25s cubic-bezier(.2,.8,.2,1)
+}
+.mod-card:hover{transform:translateY(-3px);box-shadow:0 14px 30px color-mix(in srgb,var(--c1) 30%,transparent)}
+.mc-ico{font-size:1.32rem;margin-bottom:.42rem}
+.mc-title{font-weight:800}
+.mc-desc{font-size:.79rem;line-height:1.45;color:var(--muted);margin-top:.24rem}
+.tbl-wrap{overflow:auto;border:1px solid var(--line);border-radius:12px}
+table{width:100%;border-collapse:collapse;font-size:.83rem}
+th{font:700 .65rem var(--mono);letter-spacing:1px;text-transform:uppercase;color:var(--muted);background:color-mix(in srgb,var(--brand) 8%,var(--card));padding:.68rem .82rem;text-align:left;border-bottom:1px solid var(--line)}
+td{padding:.6rem .82rem;border-bottom:1px solid var(--line)}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:color-mix(in srgb,var(--brand) 6%,transparent)}
+.badge{display:inline-block;padding:.17rem .5rem;border-radius:999px;font:700 .67rem var(--mono)}
+.bA{background:color-mix(in srgb,var(--ok) 20%,transparent);color:var(--ok)}.bB{background:color-mix(in srgb,var(--brand) 20%,transparent);color:var(--brand)}
+.bC{background:color-mix(in srgb,var(--warn) 20%,transparent);color:var(--warn)}.bD{background:color-mix(in srgb,#ea580c 18%,transparent);color:#ea580c}.bF{background:color-mix(in srgb,var(--bad) 20%,transparent);color:var(--bad)}
+.sr{border:1px solid var(--line);border-radius:12px;padding:.85rem .92rem;margin-bottom:.55rem;background:var(--card);animation:fadeUp .32s ease}
+@keyframes fadeUp{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.sr-name{font-weight:800}
+.sr-meta{font-size:.79rem;color:var(--muted);margin-top:.2rem}
+.file-item{display:flex;align-items:center;gap:.64rem;border:1px solid var(--line);background:var(--card);border-radius:11px;padding:.6rem .78rem;margin-bottom:.36rem}
+.file-nm{font:700 .77rem var(--mono);color:var(--brand);flex:1}
+.file-sz{font:700 .72rem var(--mono);color:var(--muted)}
+.bar-row{display:flex;align-items:center;gap:.5rem;margin-bottom:.45rem}
+.bar-lbl{width:124px;text-align:right;font-size:.75rem;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.bar-track{flex:1;height:18px;border-radius:999px;background:color-mix(in srgb,var(--muted) 16%,transparent);overflow:hidden}
+.bar-fill{height:100%;display:flex;align-items:center;padding-left:7px;font:700 .67rem var(--mono);color:#0f172a;transition:width .85s cubic-bezier(.2,.8,.2,1)}
+#toast{position:fixed;right:1rem;bottom:1rem;z-index:999;background:linear-gradient(135deg,var(--brand),var(--brand-2));color:#fff;border-radius:10px;padding:.58rem .92rem;font-weight:800;font-size:.82rem;transform:translateY(65px);opacity:0;transition:all .26s ease}
+#toast.show{transform:translateY(0);opacity:1}
+@media(max-width:860px){
+  .top-links{overflow:auto;max-width:52vw}
+  .top-link{white-space:nowrap;padding:.5rem .58rem;font-size:.9rem}
+  .brand-text{font-size:1.3rem}
+  .cta-btn{padding:.56rem .8rem;font-size:.85rem}
+  .g2,.g3,.dash-grid{grid-template-columns:1fr}
+  main{padding:1rem}
+}
+</style>
+</head>
+<body>
+<header>
+  <div class="top-nav">
+    <div class="brand">
+      <div class="brand-badge">N</div>
+      <div class="brand-text">NovaCampus</div>
+    </div>
+    <div class="top-links">
+      <button class="top-link nav-btn active" data-p="dashboard" onclick="go('dashboard')">Dashboard</button>
+      <button class="top-link nav-btn" data-p="reg" onclick="go('reg')">Registration</button>
+      <button class="top-link nav-btn" data-p="enroll" onclick="go('enroll')">Enrollment</button>
+      <button class="top-link nav-btn" data-p="records" onclick="go('records')">Records</button>
+      <button class="top-link nav-btn" data-p="search" onclick="go('search')">Search</button>
+      <button class="top-link nav-btn" data-p="fee" onclick="go('fee')">Fees</button>
+      <button class="top-link nav-btn" data-p="files" onclick="go('files')">Files</button>
+      <button class="top-link nav-btn" data-p="analytics" onclick="go('analytics')">Analytics</button>
+    </div>
+    <div class="right-tools">
+      <button class="theme-btn" id="theme-toggle" onclick="toggleTheme()" title="Toggle theme">◐</button>
+      <button class="cta-btn" onclick="logoutAndExit()">Logout</button>
+    </div>
+  </div>
+</header>
+
+<main>
+<div class="page active" id="page-dashboard">
+  <div class="ph">
+    <div class="ph-lab">Integrated Project</div>
+    <div class="ph-title">Nova Campus Intelligence Grid</div>
+    <div class="ph-desc">Futuristic UI, persistent browser DB, smooth motion, and live module syncing.</div>
+  </div>
+  <div class="stats">
+    <div class="stat"><div class="stat-v" id="ds-s">0</div><div class="stat-l">Students Registered</div></div>
+    <div class="stat"><div class="stat-v" id="ds-c">0</div><div class="stat-l">Courses Enrolled</div></div>
+    <div class="stat"><div class="stat-v" id="ds-f">0</div><div class="stat-l">Files Stored</div></div>
+    <div class="stat"><div class="stat-v" id="ds-a">-</div><div class="stat-l">Average Score</div></div>
+  </div>
+  <div class="dash-grid">
+    <div class="mod-card" style="--c1:#2563eb" onclick="go('reg')"><div class="mc-ico">Lab-1</div><div class="mc-title">Registration</div><div class="mc-desc">Create student profiles with auto grading.</div></div>
+    <div class="mod-card" style="--c1:#06b6d4" onclick="go('enroll')"><div class="mc-ico">Lab-2</div><div class="mc-title">Enrollment</div><div class="mc-desc">Link each student with up to 5 courses.</div></div>
+    <div class="mod-card" style="--c1:#7c3aed" onclick="go('records')"><div class="mc-ico">Lab-3</div><div class="mc-title">Records</div><div class="mc-desc">Maintain and delete student records.</div></div>
+    <div class="mod-card" style="--c1:#0ea5e9" onclick="go('search')"><div class="mc-ico">Lab-4</div><div class="mc-title">Search & Sort</div><div class="mc-desc">Fast query and sorting tools.</div></div>
+    <div class="mod-card" style="--c1:#16a34a" onclick="go('fee')"><div class="mc-ico">Lab-5</div><div class="mc-title">Fee Calculator</div><div class="mc-desc">Category-driven fee computation.</div></div>
+    <div class="mod-card" style="--c1:#ef4444" onclick="go('files')"><div class="mc-ico">Lab-6</div><div class="mc-title">File Manager</div><div class="mc-desc">Simulate file operations and scans.</div></div>
+    <div class="mod-card" style="--c1:#8b5cf6" onclick="go('analytics')"><div class="mc-ico">Lab-7</div><div class="mc-title">Analytics</div><div class="mc-desc">Statistical reports and visual bars.</div></div>
+  </div>
+</div>
+
+<div class="page" id="page-reg">
+  <div class="ph"><div class="ph-lab">Module 1</div><div class="ph-title">Student Registration</div><div class="ph-desc">Every new student is auto-saved to browser DB.</div></div>
+  <div class="card">
+    <div class="card-head">Enter Student Details</div>
+    <div class="g3">
+      <div><label>Student ID</label><input id="r-id" placeholder="e.g. NX201" /></div>
+      <div><label>Full Name</label><input id="r-name" placeholder="e.g. Ishan Kulkarni" /></div>
+      <div><label>Exam Score (0-100)</label><input id="r-score" type="number" min="0" max="100" placeholder="e.g. 84" /></div>
+    </div>
+    <div class="g2">
+      <div><label>Department</label><select id="r-dept"><option>Computer Science</option><option>Information Technology</option><option>Electronics</option><option>Mechanical</option><option>Civil</option></select></div>
+      <div><label>Age</label><input id="r-age" type="number" min="17" max="30" placeholder="e.g. 21" /></div>
+    </div>
+    <div class="btns"><button class="btn btn-g" onclick="registerStudent()">Register Student</button><button class="btn btn-b" onclick="clearReg()">Clear</button></div>
+  </div>
+  <div class="card"><div class="card-head">Output</div><div class="term" id="r-out"><span class="c-muted">// Output will appear here...</span></div></div>
+</div>
+
+<div class="page" id="page-enroll">
+  <div class="ph"><div class="ph-lab">Module 2</div><div class="ph-title">Course Enrollment</div><div class="ph-desc">Assign courses to both seeded and newly added students.</div></div>
+  <div class="card">
+    <div class="card-head">Add Course Entry</div>
+    <div class="g3">
+      <div><label>Student ID</label><input id="e-sid" placeholder="e.g. NX201" /></div>
+      <div><label>Course Name</label><input id="e-course" placeholder="e.g. Cloud Fundamentals" /></div>
+      <div><label>Credits (1-6)</label><input id="e-credits" type="number" min="1" max="6" /></div>
+    </div>
+    <div class="btns"><button class="btn btn-g" onclick="addCourse()">Add Course</button><button class="btn btn-b" onclick="showEnrollReport()">Show Report</button><button class="btn btn-r btn-sm" onclick="clearEnroll()">Clear Log</button></div>
+  </div>
+  <div class="card"><div class="card-head">Console Log</div><div class="term" id="e-out"><span class="c-muted">// Enrollment log...</span></div></div>
+  <div class="card" id="e-table-card" style="display:none"><div class="card-head">Enrolled Courses</div><div id="e-table"></div></div>
+</div>
+
+<div class="page" id="page-records">
+  <div class="ph"><div class="ph-lab">Module 3</div><div class="ph-title">Student Records</div><div class="ph-desc">Remove any student; linked courses are cleaned up too.</div></div>
+  <div class="stats"><div class="stat"><div class="stat-v" id="rc-n">0</div><div class="stat-l">Total Students</div></div><div class="stat"><div class="stat-v" id="rc-avg">-</div><div class="stat-l">Average Score</div></div><div class="stat"><div class="stat-v" id="rc-top">-</div><div class="stat-l">Highest Score</div></div></div>
+  <div class="card"><div class="card-head">All Student Records</div><div id="rec-table"><div style="color:var(--muted);font-size:.85rem;padding:.5rem">No students yet.</div></div></div>
+  <div class="card"><div class="card-head">Event Participation Analysis</div><div class="term" id="rec-sets"><span class="c-muted">// Register students to see set analysis...</span></div></div>
+</div>
+
+<div class="page" id="page-search">
+  <div class="ph"><div class="ph-lab">Module 4</div><div class="ph-title">Search & Sort</div><div class="ph-desc">Works directly on data loaded from browser storage.</div></div>
+  <div class="card">
+    <div class="card-head">Controls</div>
+    <div class="g2">
+      <div><label>Search (Name or ID)</label><input id="s-q" oninput="doSearch()" placeholder="e.g. Ishan or NX201" /></div>
+      <div><label>Sort By</label><select id="s-sort" onchange="doSearch()"><option value="name">Name A-Z</option><option value="score-d">Score High-Low</option><option value="score-a">Score Low-High</option><option value="grade">Grade</option></select></div>
+    </div>
+    <div class="btns"><button class="btn btn-b btn-sm" onclick="showSortLog()">Show Sort Steps</button></div>
+  </div>
+  <div id="s-log-card" class="card" style="display:none"><div class="card-head">Sort Algorithm Log</div><div class="term" id="s-log"></div></div>
+  <div id="s-results"></div>
+</div>
+
+<div class="page" id="page-fee">
+  <div class="ph"><div class="ph-lab">Module 5</div><div class="ph-title">Fee Calculator</div><div class="ph-desc">Function-driven and category aware.</div></div>
+  <div class="card">
+    <div class="card-head">Fee Inputs</div>
+    <div class="g2"><div><label>Tuition Fee (INR)</label><input id="f-tuition" type="number" value="50000" /></div><div><label>Hostel Fee (INR)</label><input id="f-hostel" type="number" value="0" /></div></div>
+    <div class="g2"><div><label>Transport Fee (INR)</label><input id="f-transport" type="number" value="0" /></div><div><label>Student Category</label><select id="f-cat"><option value="1">General (no discount)</option><option value=".85">OBC (15% discount)</option><option value=".5">SC/ST (50% discount)</option><option value="2.5">NRI (2.5x fee)</option></select></div></div>
+    <div class="btns"><button class="btn btn-g" onclick="calcFee()">Calculate</button></div>
+  </div>
+  <div class="card"><div class="card-head">Fee Breakdown</div><div class="term" id="f-out"><span class="c-muted">// Fee details...</span></div></div>
+</div>
+
+<div class="page" id="page-files">
+  <div class="ph"><div class="ph-lab">Module 6 & 7</div><div class="ph-title">File Handling</div><div class="ph-desc">Simulated file operations with protected messages.</div></div>
+  <div class="card">
+    <div class="card-head">Write / Read / Delete</div>
+    <div class="g2"><div><label>Filename</label><input id="fl-name" placeholder="e.g. semester_log.txt" /></div><div><label>Content</label><input id="fl-content" placeholder="e.g. NX201,Ishan Kulkarni,84,B" /></div></div>
+    <div class="btns"><button class="btn btn-g" onclick="writeFile()">Write / Append</button><button class="btn btn-b" onclick="readFile()">Read</button><button class="btn btn-b" onclick="scanDir()">Scan</button><button class="btn btn-r btn-sm" onclick="deleteFile()">Delete</button></div>
+  </div>
+  <div class="card"><div class="card-head">File System</div><div id="fl-list"><div style="color:var(--muted);font-size:.83rem;padding:.25rem">No files yet.</div></div></div>
+  <div class="card"><div class="card-head">Console Output</div><div class="term" id="fl-out"><span class="c-muted">// File operations log...</span></div></div>
+</div>
+
+<div class="page" id="page-analytics">
+  <div class="ph"><div class="ph-lab">Module 8</div><div class="ph-title">Performance Analytics</div><div class="ph-desc">Live metrics from all current student records.</div></div>
+  <div class="stats"><div class="stat"><div class="stat-v" id="an-mean">-</div><div class="stat-l">Mean Score</div></div><div class="stat"><div class="stat-v" id="an-med">-</div><div class="stat-l">Median Score</div></div><div class="stat"><div class="stat-v" id="an-std">-</div><div class="stat-l">Std Deviation</div></div><div class="stat"><div class="stat-v" id="an-top">-</div><div class="stat-l">Top Performer</div></div></div>
+  <div class="btns" style="margin-bottom:1rem"><button class="btn btn-g" onclick="runAnalytics()">Run Analytics</button></div>
+  <div class="card"><div class="card-head">Grade Distribution</div><div id="an-grade-bars"><div style="color:var(--muted);font-size:.83rem">Register students first.</div></div></div>
+  <div class="card"><div class="card-head">Student Performance</div><div id="an-stu-bars"><div style="color:var(--muted);font-size:.83rem">Register students first.</div></div></div>
+  <div class="card"><div class="card-head">Statistical Summary</div><div class="term" id="an-out"><span class="c-muted">// Click Run Analytics...</span></div></div>
+</div>
+</main>
+
+<div id="toast"></div>
+
+<script>
+let students=[],courses={},files={},fileLog=[],enrollLog=[];
+const AUTH_KEY="nova_campus_auth_v1";
+const DB_KEY="nova_campus_db_v3";
+const THEME_KEY="nova_campus_theme";
+const MAX_COURSES=5;
+
+function saveDB(){localStorage.setItem(DB_KEY,JSON.stringify({students,courses,files,fileLog,enrollLog}));}
+function loadDB(){
+  try{
+    const raw=localStorage.getItem(DB_KEY);
+    if(raw){
+      const db=JSON.parse(raw);
+      students=Array.isArray(db.students)?db.students:[];
+      courses=db.courses&&typeof db.courses==="object"?db.courses:{};
+      files=db.files&&typeof db.files==="object"?db.files:{};
+      fileLog=Array.isArray(db.fileLog)?db.fileLog:[];
+      enrollLog=Array.isArray(db.enrollLog)?db.enrollLog:[];
+      if(students.length>=20)return;
+      // Auto-upgrade old saved data to new 20-student seed.
+      seedFreshData();saveDB();return;
+    }
+  }catch(e){}
+  seedFreshData();saveDB();
+}
+function seedFreshData(){
+  const demo=[
+    {id:"NX201",name:"Ishan Kulkarni",age:21,score:84,dept:"Computer Science Engineering"},
+    {id:"NX202",name:"Myra Sen",age:20,score:96,dept:"Information Technology"},
+    {id:"NX203",name:"Kabir Ahuja",age:22,score:68,dept:"Electronics and Communication"},
+    {id:"NX204",name:"Tara Banerjee",age:19,score:45,dept:"Mechanical Engineering"},
+    {id:"NX205",name:"Arjun Pillai",age:20,score:78,dept:"Civil Engineering"},
+    {id:"NX206",name:"Rhea Malhotra",age:21,score:88,dept:"Electrical Engineering"},
+    {id:"NX207",name:"Vivaan Chopra",age:22,score:59,dept:"Chemical Engineering"},
+    {id:"NX208",name:"Naina Kapoor",age:20,score:73,dept:"Biotechnology"},
+    {id:"NX209",name:"Aditya Rao",age:19,score:92,dept:"Aerospace Engineering"},
+    {id:"NX210",name:"Sana Mirza",age:21,score:64,dept:"Automobile Engineering"},
+    {id:"NX211",name:"Kunal Sethi",age:22,score:81,dept:"Mechatronics"},
+    {id:"NX212",name:"Aisha Dutta",age:20,score:39,dept:"Data Science"},
+    {id:"NX213",name:"Pranav Iyer",age:21,score:55,dept:"Artificial Intelligence"},
+    {id:"NX214",name:"Diya Khanna",age:19,score:99,dept:"Cyber Security"},
+    {id:"NX215",name:"Reyansh Gupta",age:20,score:71,dept:"Robotics Engineering"},
+    {id:"NX216",name:"Meher Nanda",age:22,score:86,dept:"Industrial Engineering"},
+    {id:"NX217",name:"Ira Thomas",age:21,score:62,dept:"Environmental Engineering"},
+    {id:"NX218",name:"Yash Patil",age:20,score:48,dept:"Materials Engineering"},
+    {id:"NX219",name:"Anaya Bose",age:19,score:90,dept:"Naval Architecture"},
+    {id:"NX220",name:"Ritvik Jain",age:22,score:77,dept:"Biomedical Engineering"}
+  ];
+  students=[];
+  demo.forEach(d=>{const g=evalGrade(d.score);students.push({...d,...g});});
+  courses={
+    NX201:[{name:"Cloud Fundamentals",credits:4},{name:"Data Modeling",credits:3}],
+    NX202:[{name:"AI Systems",credits:4},{name:"Advanced Python",credits:2}],
+    NX203:[{name:"Signals & Systems",credits:3}],
+    NX204:[{name:"Thermodynamics",credits:4}],
+    NX205:[{name:"Surveying",credits:3}],
+    NX206:[{name:"Operating Systems",credits:4}],
+    NX207:[{name:"Web Engineering",credits:3}],
+    NX208:[{name:"Digital Electronics",credits:4}],
+    NX209:[{name:"Manufacturing Process",credits:3}],
+    NX210:[{name:"Structural Basics",credits:2}]
+  };
+  files={
+    "semester_log.txt":[
+      "NX201,Ishan Kulkarni,84,B","NX202,Myra Sen,96,A","NX203,Kabir Ahuja,68,C","NX204,Tara Banerjee,45,D",
+      "NX205,Arjun Pillai,78,B","NX206,Rhea Malhotra,88,B","NX207,Vivaan Chopra,59,D","NX208,Naina Kapoor,73,C",
+      "NX209,Aditya Rao,92,A","NX210,Sana Mirza,64,C"
+    ],
+    "performance_snapshot.txt":[
+      "NX211,Kunal Sethi,81,B","NX212,Aisha Dutta,39,F","NX213,Pranav Iyer,55,D","NX214,Diya Khanna,99,A",
+      "NX215,Reyansh Gupta,71,C","NX216,Meher Nanda,86,B","NX217,Ira Thomas,62,C","NX218,Yash Patil,48,D",
+      "NX219,Anaya Bose,90,A","NX220,Ritvik Jain,77,B"
+    ]
+  };
+  fileLog=[];enrollLog=[];
+}
+
+function applyTheme(){
+  const theme=localStorage.getItem(THEME_KEY)||"light";
+  document.body.classList.toggle("dark",theme==="dark");
+  document.getElementById("theme-toggle").textContent=theme==="dark"?"☀":"◐";
+}
+function logoutAndExit(){
+  localStorage.removeItem(AUTH_KEY);
+  window.location.href="index.html";
+}
+function toggleTheme(){
+  const isDark=document.body.classList.contains("dark");
+  localStorage.setItem(THEME_KEY,isDark?"light":"dark");
+  applyTheme();
+}
+
+function go(p){
+  document.querySelectorAll(".page").forEach(x=>x.classList.remove("active"));
+  document.querySelectorAll(".nav-btn").forEach(x=>x.classList.remove("active"));
+  document.getElementById("page-"+p).classList.add("active");
+  document.querySelector(`[data-p="${p}"]`).classList.add("active");
+  if(p==="records")renderRecords();
+  if(p==="search")doSearch();
+  if(p==="analytics")runAnalytics();
+  updateDash();
+}
+function toast(msg){const t=document.getElementById("toast");t.textContent=msg;t.classList.add("show");setTimeout(()=>t.classList.remove("show"),2100);}
+function evalGrade(score){if(score>=90)return{grade:"A",remark:"Excellent"};else if(score>=75)return{grade:"B",remark:"Very Good"};else if(score>=60)return{grade:"C",remark:"Good"};else if(score>=40)return{grade:"D",remark:"Average"};return{grade:"F",remark:"Needs Improvement"};}
+function makeDynamicColors(count,offset=0){
+  const n=Math.max(count,1),colors=[];
+  for(let i=0;i<n;i++){
+    const hue=Math.round((360/n)*i+offset)%360;
+    colors.push(`hsl(${hue} 82% 58%)`);
+  }
+  return colors;
+}
+
+function registerStudent(){
+  const id=document.getElementById("r-id").value.trim();
+  const name=document.getElementById("r-name").value.trim();
+  const score=parseFloat(document.getElementById("r-score").value);
+  const dept=document.getElementById("r-dept").value;
+  const age=parseInt(document.getElementById("r-age").value)||20;
+  const out=document.getElementById("r-out");
+  if(!id||!name){out.innerHTML='<span class="c-err">Error: ID and Name are required.</span>';return;}
+  if(isNaN(score)||score<0||score>100){out.innerHTML='<span class="c-err">Error: Score must be 0-100.</span>';return;}
+  if(students.find(s=>s.id===id)){out.innerHTML=`<span class="c-err">Error: ID "${id}" already exists.</span>`;return;}
+  const {grade,remark}=evalGrade(score);
+  students.push({id,name,age,dept,score,grade,remark});
+  saveDB();
+  out.innerHTML=`<span class="c-blue">--- Student Report ---</span>\nID         : ${id}\nName       : ${name}\nAge        : ${age}\nDepartment : ${dept}\nScore      : ${score}\nGrade      : <span class="c-blue">${grade}</span>\nRemark     : ${remark}\n\n<span class="c-muted">Saved to browser DB.</span>`;
+  renderRecords();doSearch();runAnalytics();updateDash();toast("Student added and saved.");
+}
+function clearReg(){["r-id","r-name","r-score","r-age"].forEach(id=>document.getElementById(id).value="");document.getElementById("r-out").innerHTML='<span class="c-muted">// Cleared.</span>';}
+
+function addCourse(){
+  const sid=document.getElementById("e-sid").value.trim();
+  const cname=document.getElementById("e-course").value.trim();
+  const credStr=document.getElementById("e-credits").value.trim();
+  if(!sid){enrollLog.push('<span class="c-err">Error: Student ID required.</span>');renderEnrollLog();saveDB();return;}
+  if(!students.some(s=>s.id===sid)){enrollLog.push(`<span class="c-err">Error: Student ID ${sid} not found.</span>`);renderEnrollLog();saveDB();return;}
+  if(!courses[sid])courses[sid]=[];
+  if(courses[sid].length>=MAX_COURSES){enrollLog.push(`<span class="c-warn">Max ${MAX_COURSES} courses reached for ${sid}.</span>`);renderEnrollLog();renderEnrollTable(sid);saveDB();return;}
+  if(!credStr||isNaN(credStr)){enrollLog.push('<span class="c-warn">Invalid credits. Skipping...</span>');renderEnrollLog();saveDB();return;}
+  const credits=parseInt(credStr);
+  if(credits<=0||credits>6){enrollLog.push('<span class="c-warn">Credits must be between 1 and 6.</span>');renderEnrollLog();saveDB();return;}
+  if(!cname){enrollLog.push('<span class="c-warn">Course name empty. Skipping...</span>');renderEnrollLog();saveDB();return;}
+  courses[sid].push({name:cname,credits});
+  enrollLog.push(`<span class="c-blue">OK</span> ${cname} (${credits} cr) added for ${sid} [${courses[sid].length}/${MAX_COURSES}]`);
+  renderEnrollLog();renderEnrollTable(sid);saveDB();updateDash();toast("Course added.");
+}
+function renderEnrollLog(){document.getElementById("e-out").innerHTML=enrollLog.slice(-10).join("\n")||'<span class="c-muted">// Empty</span>';}
+function renderEnrollTable(sid){
+  const c=courses[sid]||[];
+  const card=document.getElementById("e-table-card");
+  const wrap=document.getElementById("e-table");
+  if(!c.length){card.style.display="none";return;}
+  card.style.display="block";
+  let h='<div class="tbl-wrap"><table><tr><th>#</th><th>Course</th><th>Credits</th></tr>';
+  c.forEach((x,i)=>h+=`<tr><td>${i+1}</td><td>${x.name}</td><td>${x.credits}</td></tr>`);
+  const tot=c.reduce((a,x)=>a+x.credits,0);
+  h+=`<tr><td colspan="2" style="color:var(--muted)">Total Credits</td><td><b>${tot}</b></td></tr></table></div>`;
+  wrap.innerHTML=h;
+}
+function showEnrollReport(){
+  const ids=Object.keys(courses);
+  if(!ids.length){enrollLog.push('<span class="c-warn">No courses added yet.</span>');renderEnrollLog();return;}
+  ids.forEach(sid=>{
+    enrollLog.push(`\n<span class="c-blue">Report ${sid}</span>`);
+    (courses[sid]||[]).forEach((c,i)=>enrollLog.push(` ${i+1}. ${c.name} (${c.credits} cr)`));
+    const t=(courses[sid]||[]).reduce((a,x)=>a+x.credits,0);
+    enrollLog.push(` Total: ${(courses[sid]||[]).length} courses | ${t} credits`);
+  });
+  renderEnrollLog();saveDB();
+}
+function clearEnroll(){enrollLog=[];document.getElementById("e-out").innerHTML='<span class="c-muted">// Cleared.</span>';document.getElementById("e-table-card").style.display="none";saveDB();}
+
+function renderRecords(){
+  const n=students.length;
+  document.getElementById("rc-n").textContent=n;
+  if(!n){
+    document.getElementById("rc-avg").textContent="-";document.getElementById("rc-top").textContent="-";
+    document.getElementById("rec-table").innerHTML='<div style="color:var(--muted);font-size:.83rem;padding:.25rem">No students registered yet.</div>';
+    document.getElementById("rec-sets").innerHTML='<span class="c-muted">// Add students to see set analysis...</span>';return;
+  }
+  const scores=students.map(s=>s.score);
+  document.getElementById("rc-avg").textContent=(scores.reduce((a,b)=>a+b,0)/n).toFixed(1);
+  document.getElementById("rc-top").textContent=Math.max(...scores);
+  let h='<div class="tbl-wrap"><table><tr><th>ID</th><th>Name</th><th>Age</th><th>Dept</th><th>Score</th><th>Grade</th><th>Remark</th><th></th></tr>';
+  students.forEach((s,i)=>{h+=`<tr><td style="font-family:ui-monospace">${s.id}</td><td>${s.name}</td><td>${s.age}</td><td>${s.dept}</td><td>${s.score}</td><td><span class="badge b${s.grade}">${s.grade}</span></td><td style="color:var(--muted)">${s.remark}</td><td><button class="btn btn-r btn-sm" onclick="delStudent(${i})">Delete</button></td></tr>`;});
+  h+="</table></div>";
+  document.getElementById("rec-table").innerHTML=h;
+  const names=students.map(s=>s.name),eventA=new Set(names.slice(0,Math.ceil(names.length*.7))),eventB=new Set(names.slice(Math.floor(names.length*.3))),common=[...eventA].filter(x=>eventB.has(x)),all=[...new Set([...eventA,...eventB])],onlyA=[...eventA].filter(x=>!eventB.has(x));
+  document.getElementById("rec-sets").innerHTML=`<span class="c-blue">event_A = { ${[...eventA].join(", ")} }</span>\n<span class="c-pink">event_B = { ${[...eventB].join(", ")} }</span>\n\ncommon (A & B) = { ${common.join(", ")||"-"} }\nall (A | B) = { ${all.join(", ")} }\nonly_A (A - B) = { ${onlyA.join(", ")||"-"} }`;
+}
+function delStudent(i){const sid=students[i]?.id;if(!sid)return;students.splice(i,1);delete courses[sid];saveDB();renderRecords();doSearch();runAnalytics();updateDash();toast("Student removed and DB updated.");}
+
+function doSearch(){
+  const q=(document.getElementById("s-q")?.value||"").toLowerCase();
+  const sort=(document.getElementById("s-sort")?.value)||"name";
+  let list=[...students];
+  if(q)list=list.filter(s=>s.name.toLowerCase().includes(q)||s.id.toLowerCase().includes(q));
+  if(sort==="name"){for(let i=0;i<list.length;i++)for(let j=0;j<list.length-i-1;j++)if(list[j].name.localeCompare(list[j+1].name)>0)[list[j],list[j+1]]=[list[j+1],list[j]];}
+  else if(sort==="score-a"){for(let i=0;i<list.length;i++){let mi=i;for(let j=i+1;j<list.length;j++)if(list[j].score<list[mi].score)mi=j;[list[i],list[mi]]=[list[mi],list[i]];}}
+  else if(sort==="score-d")list.sort((a,b)=>b.score-a.score);
+  else if(sort==="grade")list.sort((a,b)=>a.grade.localeCompare(b.grade));
+  const res=document.getElementById("s-results");
+  if(!list.length){res.innerHTML='<div class="card" style="color:var(--muted);font-size:.85rem">No students found.</div>';return;}
+  res.innerHTML=list.map(s=>`<div class="sr"><span class="badge b${s.grade}" style="float:right">${s.grade} | ${s.score}</span><div class="sr-name">${s.name}</div><div class="sr-meta">${s.id} | ${s.dept} | Age ${s.age} | ${s.remark}</div></div>`).join("");
+}
+function showSortLog(){
+  const card=document.getElementById("s-log-card"),out=document.getElementById("s-log");card.style.display="block";
+  if(!students.length){out.innerHTML='<span class="c-muted">// No students to sort yet.</span>';return;}
+  let ids=[...students.map(s=>s.id)],log=`<span class="c-blue">-- Bubble Sort on IDs --</span>\nOriginal: [${ids.join(", ")}]\n`,arr=[...students.map(s=>s.score)],swaps=0;
+  for(let i=0;i<arr.length;i++)for(let j=0;j<arr.length-i-1;j++)if(arr[j]>arr[j+1]){[arr[j],arr[j+1]]=[arr[j+1],arr[j]];swaps++;}
+  log+=`Sorted scores: [${arr.join(", ")}] (${swaps} swaps)\n`;
+  const target=arr[0];log+=`\n<span class="c-blue">-- Linear Search for ${target} --</span>\n`;for(let i=0;i<arr.length;i++){log+=` checking ${i}: ${arr[i]}`;if(arr[i]===target){log+=" <- found\n";break;}log+="\n";}
+  log+=`\n<span class="c-blue">-- Binary Search demo --</span>\n`;let lo=0,hi=arr.length-1,bTarget=arr[Math.floor(arr.length/2)],bf=-1;while(lo<=hi){let mid=Math.floor((lo+hi)/2);log+=` low=${lo} mid=${mid} high=${hi} value=${arr[mid]}\n`;if(arr[mid]===bTarget){bf=mid;break;}else if(arr[mid]<bTarget)lo=mid+1;else hi=mid-1;}log+=bf!==-1?` found at index ${bf}`:" not found";
+  out.innerHTML=log;
+}
+
+function calculate_fee(tuition_fee,hostel_fee=0,transportation_fee=0){return tuition_fee+hostel_fee+transportation_fee;}
+function calcFee(){
+  const tuition=parseFloat(document.getElementById("f-tuition").value)||0,hostel=parseFloat(document.getElementById("f-hostel").value)||0,transport=parseFloat(document.getElementById("f-transport").value)||0,catMul=parseFloat(document.getElementById("f-cat").value),catLabel=document.getElementById("f-cat").selectedOptions[0].text,adj=tuition*catMul,t1=calculate_fee(adj),t2=calculate_fee(adj,hostel),t3=calculate_fee(adj,hostel,transport),fmt=n=>"INR "+n.toLocaleString("en-IN",{minimumFractionDigits:2});
+  document.getElementById("f-out").innerHTML=`<span class="c-blue">Category: ${catLabel}</span>\nTuition (base): ${fmt(tuition)}\nTuition (adj):  ${fmt(adj)}\nHostel:         ${fmt(hostel)}\nTransport:      ${fmt(transport)}\n------------------------------\nTuition only:              <span class="c-blue">${fmt(t1)}</span>\nTuition + Hostel:          <span class="c-blue">${fmt(t2)}</span>\nTuition + Hostel + Transport: <span class="c-blue">${fmt(t3)}</span>`;
+  toast("Fee calculated.");
+}
+
+function appendFileLog(msg){fileLog.push(msg);document.getElementById("fl-out").innerHTML=fileLog.slice(-12).join("\n");saveDB();}
+function writeFile(){const fname=document.getElementById("fl-name").value.trim(),content=document.getElementById("fl-content").value.trim();if(!fname){appendFileLog('<span class="c-err">No filename provided.</span>');return;}if(!content){appendFileLog('<span class="c-warn">Empty content skipped.</span>');return;}if(!files[fname])files[fname]=[];files[fname].push(content);appendFileLog(`<span class="c-blue">OK</span> Appended to "${fname}": ${content}`);renderFileList();updateDash();toast("Written to file store.");}
+function readFile(){const fname=document.getElementById("fl-name").value.trim();if(!fname||!files[fname]){appendFileLog(`<span class="c-err">File "${fname}" not found.</span>`);return;}appendFileLog(`<span class="c-blue">Reading "${fname}":</span>\n`+files[fname].map((l,i)=>` [${i+1}] ${l}`).join("\n"));}
+function deleteFile(){const fname=document.getElementById("fl-name").value.trim();if(!fname||!files[fname]){appendFileLog(`<span class="c-err">File "${fname}" not found.</span>`);return;}delete files[fname];appendFileLog(`<span class="c-warn">Deleted "${fname}".</span>`);renderFileList();updateDash();saveDB();}
+function scanDir(){const path=document.getElementById("fl-name").value.trim()||"student_projects/";appendFileLog(`<span class="c-blue">scan("${path}"):</span>`);const keys=Object.keys(files);if(!keys.length){appendFileLog('<span class="c-err">Empty directory.</span>');return;}appendFileLog(path+"/");keys.forEach(f=>appendFileLog(` ${f} (${(files[f]||[]).length} record${(files[f]||[]).length!==1?"s":""})`));appendFileLog(`<span class="c-muted">Scan complete. ${keys.length} file(s).</span>`);}
+function renderFileList(){const el=document.getElementById("fl-list"),keys=Object.keys(files);if(!keys.length){el.innerHTML='<div style="color:var(--muted);font-size:.83rem;padding:.25rem">No files yet.</div>';return;}el.innerHTML=keys.map(f=>`<div class="file-item"><span class="file-nm">${f}</span><span class="file-sz">${files[f].length} line(s)</span></div>`).join("");}
+
+function runAnalytics(){
+  if(!students.length){
+    document.getElementById("an-grade-bars").innerHTML='<div style="color:var(--muted);font-size:.83rem">No students yet.</div>';
+    document.getElementById("an-stu-bars").innerHTML='<div style="color:var(--muted);font-size:.83rem">No students yet.</div>';
+    document.getElementById("an-mean").textContent="-";document.getElementById("an-med").textContent="-";document.getElementById("an-std").textContent="-";document.getElementById("an-top").textContent="-";
+    document.getElementById("an-out").innerHTML='<span class="c-muted">// Add students first.</span>';return;
+  }
+  const scores=students.map(s=>s.score),n=scores.length,mean=scores.reduce((a,b)=>a+b,0)/n,sorted=[...scores].sort((a,b)=>a-b),median=n%2?sorted[Math.floor(n/2)]:(sorted[n/2-1]+sorted[n/2])/2,std=Math.sqrt(scores.reduce((a,b)=>a+(b-mean)**2,0)/n),topS=students.reduce((a,b)=>a.score>b.score?a:b);
+  document.getElementById("an-mean").textContent=mean.toFixed(1);document.getElementById("an-med").textContent=median.toFixed(1);document.getElementById("an-std").textContent=std.toFixed(1);document.getElementById("an-top").textContent=topS.name.split(" ")[0];
+  const gc={A:0,B:0,C:0,D:0,F:0};students.forEach(s=>gc[s.grade]++);
+  const gradeEntries=Object.entries(gc);
+  const gradeColors=makeDynamicColors(gradeEntries.length,22);
+  document.getElementById("an-grade-bars").innerHTML=gradeEntries.map(([g,c],idx)=>`<div class="bar-row"><div class="bar-lbl">Grade ${g}</div><div class="bar-track"><div class="bar-fill" style="width:${(c/n)*100}%;background:${gradeColors[idx]}">${c}</div></div></div>`).join("");
+  const ranked=[...students].sort((a,b)=>b.score-a.score);
+  const studentColors=makeDynamicColors(ranked.length,190);
+  document.getElementById("an-stu-bars").innerHTML=ranked.map((s,idx)=>`<div class="bar-row"><div class="bar-lbl" title="${s.name}">${s.name.split(" ")[0]}</div><div class="bar-track"><div class="bar-fill" style="width:${s.score}%;background:${studentColors[idx]}">${s.score}</div></div></div>`).join("");
+  const min=Math.min(...scores),max=Math.max(...scores),q1=sorted[Math.floor(n*.25)],q3=sorted[Math.floor(n*.75)];
+  document.getElementById("an-out").innerHTML=`<span class="c-blue">--- describe() ---</span>\ncount ${n}\nmean  ${mean.toFixed(2)}\nstd   ${std.toFixed(2)}\nmin   ${min}\n25%   ${q1}\n50%   ${median}\n75%   ${q3}\nmax   ${max}\n\n<span class="c-blue">Top Performer</span>\n${topS.name} (Score ${topS.score}, Grade ${topS.grade})\n\n<span class="c-muted">Departments: ${[...new Set(students.map(s=>s.dept))].join(", ")}</span>`;
+}
+
+function updateDash(){const allC=Object.values(courses).flat();document.getElementById("ds-s").textContent=students.length;document.getElementById("ds-c").textContent=allC.length;document.getElementById("ds-f").textContent=Object.keys(files).length;document.getElementById("ds-a").textContent=students.length?(students.reduce((a,s)=>a+s.score,0)/students.length).toFixed(1):"-";}
+
+(function init(){
+  if(localStorage.getItem(AUTH_KEY)!=="1"){
+    window.location.href="index.html";
+    return;
+  }
+  applyTheme();loadDB();renderEnrollLog();renderFileList();renderRecords();doSearch();runAnalytics();updateDash();
+})();
+</script>
+</body>
+</html>

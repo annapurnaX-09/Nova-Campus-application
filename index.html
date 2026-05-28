@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DSCE Admin Page</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <main class="page-shell">
+
+    <section class="login-card" id="loginSection">
+      <div class="brand">
+        <img src="DS-logo-01-01.webp" alt="DSCE Logo" class="logo">
+        <h2>Dayananda Sagar College of Engineering</h2>
+        <h1>Admin Login</h1>
+      </div>
+
+      <form id="adminLoginForm">
+        <div class="input-box">
+          <label for="adminEmail">Email</label>
+          <input type="email" id="adminEmail" placeholder="Enter email" required>
+        </div>
+
+        <div class="input-box">
+          <label for="adminPassword">Password</label>
+          <input type="password" id="adminPassword" placeholder="Enter password" required>
+        </div>
+
+        <button type="submit">Login</button>
+
+        <p id="message"></p>
+      </form>
+    </section>
+
+    <section class="dashboard hidden" id="dashboardSection">
+      <div class="dashboard-header">
+        <div class="dashboard-brand">
+          <img src="DS-logo-01-01.webp" alt="DSCE Logo" class="dashboard-logo">
+
+          <div>
+            <h2>Dayananda Sagar College of Engineering</h2>
+            <h1>Admin Dashboard</h1>
+          </div>
+        </div>
+
+        <button type="button" id="logoutBtn">Logout</button>
+      </div>
+
+      <div class="summary-box">
+        <div>
+          <p>Total Students</p>
+          <h3>20</h3>
+        </div>
+
+        <div>
+          <p>Class</p>
+          <h3>AI A</h3>
+        </div>
+
+        <div>
+          <p>Attendance Criteria</p>
+          <h3>85%</h3>
+        </div>
+      </div>
+      
+
+      <div class="table-box">
+  <div class="table-top">
+    <h2>Student Attendance List</h2>
+
+    <input type="text" id="searchInput" placeholder="Search student name">
+  </div>
+
+  <table>
+          <thead>
+           <tr>
+            <th>Name</th>
+            <th>Roll No.</th>
+            <th>Class</th>
+            <th>Total Attendance</th>
+            <th>Fee Status</th>
+            </tr>
+          </thead>
+
+          <tbody id="studentTable"></tbody>
+        </table>
+      </div>
+    </section>
+
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
