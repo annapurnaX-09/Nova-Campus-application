@@ -223,7 +223,8 @@ tr:hover td{background:color-mix(in srgb,var(--brand) 6%,transparent)}
   <div class="ph"><div class="ph-lab">Module 3</div><div class="ph-title">Student Records</div><div class="ph-desc">Remove any student; linked courses are cleaned up too.</div></div>
   <div class="stats"><div class="stat"><div class="stat-v" id="rc-n">0</div><div class="stat-l">Total Students</div></div><div class="stat"><div class="stat-v" id="rc-avg">-</div><div class="stat-l">Average Score</div></div><div class="stat"><div class="stat-v" id="rc-top">-</div><div class="stat-l">Highest Score</div></div></div>
   <div class="card"><div class="card-head">All Student Records</div><div id="rec-table"><div style="color:var(--muted);font-size:.85rem;padding:.5rem">No students yet.</div></div></div>
-
+</div>
+  
 <div class="page" id="page-search">
   <div class="ph"><div class="ph-lab">Module 4</div><div class="ph-title">Search & Sort</div><div class="ph-desc">Works directly on data loaded from browser storage.</div></div>
   <div class="card">
@@ -458,9 +459,6 @@ function renderRecords(){
   let h='<div class="tbl-wrap"><table><tr><th>ID</th><th>Name</th><th>Age</th><th>Dept</th><th>Score</th><th>Grade</th><th>Remark</th><th></th></tr>';
   students.forEach((s,i)=>{h+=`<tr><td style="font-family:ui-monospace">${s.id}</td><td>${s.name}</td><td>${s.age}</td><td>${s.dept}</td><td>${s.score}</td><td><span class="badge b${s.grade}">${s.grade}</span></td><td style="color:var(--muted)">${s.remark}</td><td><button class="btn btn-r btn-sm" onclick="delStudent(${i})">Delete</button></td></tr>`;});
   h+="</table></div>";
-  document.getElementById("rec-table").innerHTML=h;
-  const names=students.map(s=>s.name),eventA=new Set(names.slice(0,Math.ceil(names.length*.7))),eventB=new Set(names.slice(Math.floor(names.length*.3))),common=[...eventA].filter(x=>eventB.has(x)),all=[...new Set([...eventA,...eventB])],onlyA=[...eventA].filter(x=>!eventB.has(x));
-  document.getElementById("rec-sets").innerHTML=`<span class="c-blue">event_A = { ${[...eventA].join(", ")} }</span>\n<span class="c-pink">event_B = { ${[...eventB].join(", ")} }</span>\n\ncommon (A & B) = { ${common.join(", ")||"-"} }\nall (A | B) = { ${all.join(", ")} }\nonly_A (A - B) = { ${onlyA.join(", ")||"-"} }`;
 }
 function delStudent(i){const sid=students[i]?.id;if(!sid)return;students.splice(i,1);delete courses[sid];saveDB();renderRecords();doSearch();runAnalytics();updateDash();toast("Student removed and DB updated.");}
 
@@ -490,8 +488,8 @@ function showSortLog(){
 
 function calculate_fee(tuition_fee,hostel_fee=0,transportation_fee=0){return tuition_fee+hostel_fee+transportation_fee;}
 function calcFee(){
-  const tuition=parseFloat(document.getElementById("f-tuition").value)||0,hostel=parseFloat(document.getElementById("f-hostel").value)||0,transport=parseFloat(document.getElementById("f-transport").value)||0,catMul=parseFloat(document.getElementById("f-cat").value),catLabel=document.getElementById("f-cat").selectedOptions[0].text,adj=tuition*catMul,t1=calculate_fee(adj),t2=calculate_fee(adj,hostel),t3=calculate_fee(adj,hostel,transport),fmt=n=>"INR "+n.toLocaleString("en-IN",{minimumFractionDigits:2});
-  document.getElementById("f-out").innerHTML=`<span class="c-blue">Category: ${catLabel}</span>\nTuition (base): ${fmt(tuition)}\nTuition (adj):  ${fmt(adj)}\nHostel:         ${fmt(hostel)}\nTransport:      ${fmt(transport)}\n------------------------------\nTuition only:              <span class="c-blue">${fmt(t1)}</span>\nTuition + Hostel:          <span class="c-blue">${fmt(t2)}</span>\nTuition + Hostel + Transport: <span class="c-blue">${fmt(t3)}</span>`;
+  const tuition=parseFloat(document.getElementById("f-tuition").value)||0,hostel=parseFloat(document.getElementById("f-hostel").value)||0,transport=parseFloat(document.getElementById("f-transport").value)||0,adj=tuition,t1=calculate_fee(adj),t2=calculate_fee(adj,hostel),t3=calculate_fee(adj,hostel,transport),fmt=n=>"INR "+n.toLocaleString("en-IN",{minimumFractionDigits:2});
+  document.getElementById("f-out").innerHTML=`Tuition (base): ${fmt(tuition)}\nTuition (adj):  ${fmt(adj)}\nHostel:         ${fmt(hostel)}\nTransport:      ${fmt(transport)}\n------------------------------\nTuition only:              <span class="c-blue">${fmt(t1)}</span>\nTuition + Hostel:          <span class="c-blue">${fmt(t2)}</span>\nTuition + Hostel + Transport: <span class="c-blue">${fmt(t3)}</span>`;
   toast("Fee calculated.");
 }
 
