@@ -211,7 +211,7 @@ tr:hover td{background:color-mix(in srgb,var(--brand) 6%,transparent)}
     <div class="g3">
       <div><label>Student ID</label><input id="e-sid" placeholder="e.g. NX201" /></div>
       <div><label>Course Name</label><input id="e-course" placeholder="e.g. Cloud Fundamentals" /></div>
-      <div><label>Credits (1-6)</label><input id="e-credits" type="number" min="1" max="6" /></div>
+      <div><label>Credits (1-4)</label><input id="e-credits" type="number" min="1" max="4" /></div>
     </div>
     <div class="btns"><button class="btn btn-g" onclick="addCourse()">Add Course</button><button class="btn btn-b" onclick="showEnrollReport()">Show Report</button><button class="btn btn-r btn-sm" onclick="clearEnroll()">Clear Log</button></div>
   </div>
@@ -223,8 +223,6 @@ tr:hover td{background:color-mix(in srgb,var(--brand) 6%,transparent)}
   <div class="ph"><div class="ph-lab">Module 3</div><div class="ph-title">Student Records</div><div class="ph-desc">Remove any student; linked courses are cleaned up too.</div></div>
   <div class="stats"><div class="stat"><div class="stat-v" id="rc-n">0</div><div class="stat-l">Total Students</div></div><div class="stat"><div class="stat-v" id="rc-avg">-</div><div class="stat-l">Average Score</div></div><div class="stat"><div class="stat-v" id="rc-top">-</div><div class="stat-l">Highest Score</div></div></div>
   <div class="card"><div class="card-head">All Student Records</div><div id="rec-table"><div style="color:var(--muted);font-size:.85rem;padding:.5rem">No students yet.</div></div></div>
-  <div class="card"><div class="card-head">Event Participation Analysis</div><div class="term" id="rec-sets"><span class="c-muted">// Register students to see set analysis...</span></div></div>
-</div>
 
 <div class="page" id="page-search">
   <div class="ph"><div class="ph-lab">Module 4</div><div class="ph-title">Search & Sort</div><div class="ph-desc">Works directly on data loaded from browser storage.</div></div>
@@ -245,8 +243,7 @@ tr:hover td{background:color-mix(in srgb,var(--brand) 6%,transparent)}
   <div class="card">
     <div class="card-head">Fee Inputs</div>
     <div class="g2"><div><label>Tuition Fee (INR)</label><input id="f-tuition" type="number" value="50000" /></div><div><label>Hostel Fee (INR)</label><input id="f-hostel" type="number" value="0" /></div></div>
-    <div class="g2"><div><label>Transport Fee (INR)</label><input id="f-transport" type="number" value="0" /></div><div><label>Student Category</label><select id="f-cat"><option value="1">General (no discount)</option><option value=".85">OBC (15% discount)</option><option value=".5">SC/ST (50% discount)</option><option value="2.5">NRI (2.5x fee)</option></select></div></div>
-    <div class="btns"><button class="btn btn-g" onclick="calcFee()">Calculate</button></div>
+    <div class="g2"><div><label>Transport Fee (INR)</label><input id="f-transport" type="number" value="0" /></div>
   </div>
   <div class="card"><div class="card-head">Fee Breakdown</div><div class="term" id="f-out"><span class="c-muted">// Fee details...</span></div></div>
 </div>
