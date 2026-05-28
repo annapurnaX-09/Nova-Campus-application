@@ -393,7 +393,7 @@ function applyTheme(){
 }
 function logoutAndExit(){
   localStorage.removeItem(AUTH_KEY);
-  window.location.href="index.html";
+  location.reload();
 }
 function toggleTheme(){
   const isDark=document.body.classList.contains("dark");
@@ -578,11 +578,14 @@ function runAnalytics(){
 function updateDash(){const allC=Object.values(courses).flat();document.getElementById("ds-s").textContent=students.length;document.getElementById("ds-c").textContent=allC.length;document.getElementById("ds-f").textContent=Object.keys(files).length;document.getElementById("ds-a").textContent=students.length?(students.reduce((a,s)=>a+s.score,0)/students.length).toFixed(1):"-";}
 
 (function init(){
-  if(localStorage.getItem(AUTH_KEY)!=="1"){
-    window.location.href="index.html";
-    return;
-  }
-  applyTheme();loadDB();renderEnrollLog();renderFileList();renderRecords();doSearch();runAnalytics();updateDash();
+  applyTheme();
+  loadDB();
+  renderEnrollLog();
+  renderFileList();
+  renderRecords();
+  doSearch();
+  runAnalytics();
+  updateDash();
 })();
 </script>
 </body>
