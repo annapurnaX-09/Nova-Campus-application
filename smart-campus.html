@@ -240,17 +240,50 @@ tr:hover td{background:color-mix(in srgb,var(--brand) 6%,transparent)}
 </div>
 
 <div class="page" id="page-fee">
-  <div class="ph"><div class="ph-lab">Module 5</div><div class="ph-title">Fee Calculator</div><div class="ph-desc">Function-driven and category aware.</div></div>
+  <div class="ph">
+    <div class="ph-lab">Module 5</div>
+    <div class="ph-title">Fee Calculator</div>
+    <div class="ph-desc">
+      Function-driven and category aware.
+    </div>
+  </div>
+
   <div class="card">
     <div class="card-head">Fee Inputs</div>
-    <div class="g2"><div><label>Tuition Fee (INR)</label><input id="f-tuition" type="number" value="50000" /></div><div><label>Hostel Fee (INR)</label><input id="f-hostel" type="number" value="0" /></div></div>
+
+    <div class="g2">
+      <div>
+        <label>Tuition Fee (INR)</label>
+        <input id="f-tuition" type="number" value="50000" />
+      </div>
+
+      <div>
+        <label>Hostel Fee (INR)</label>
+        <input id="f-hostel" type="number" value="0" />
+      </div>
+    </div>
+
+    <div class="g2">
+      <div>
+        <label>Transport Fee (INR)</label>
+        <input id="f-transport" type="number" value="0" />
+      </div>
+    </div>
+
     <div class="btns">
-  <button class="btn btn-g" onclick="calcFee()">
-    Calculate Fee
-  </button></div>
-    <div class="g2"><div><label>Transport Fee (INR)</label><input id="f-transport" type="number" value="0" /></div>
+      <button class="btn btn-g" onclick="calcFee()">
+        Calculate Fee
+      </button>
+    </div>
   </div>
-  <div class="card"><div class="card-head">Fee Breakdown</div><div class="term" id="f-out"><span class="c-muted">// Fee details...</span></div></div>
+
+  <div class="card">
+    <div class="card-head">Fee Breakdown</div>
+
+    <div class="term" id="f-out">
+      <span class="c-muted">// Fee details...</span>
+    </div>
+  </div>
 </div>
 
 <div class="page" id="page-files">
