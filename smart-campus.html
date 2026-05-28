@@ -244,6 +244,10 @@ tr:hover td{background:color-mix(in srgb,var(--brand) 6%,transparent)}
   <div class="card">
     <div class="card-head">Fee Inputs</div>
     <div class="g2"><div><label>Tuition Fee (INR)</label><input id="f-tuition" type="number" value="50000" /></div><div><label>Hostel Fee (INR)</label><input id="f-hostel" type="number" value="0" /></div></div>
+    <div class="btns">
+  <button class="btn btn-g" onclick="calcFee()">
+    Calculate Fee
+  </button></div>
     <div class="g2"><div><label>Transport Fee (INR)</label><input id="f-transport" type="number" value="0" /></div>
   </div>
   <div class="card"><div class="card-head">Fee Breakdown</div><div class="term" id="f-out"><span class="c-muted">// Fee details...</span></div></div>
@@ -451,14 +455,32 @@ function renderRecords(){
   if(!n){
     document.getElementById("rc-avg").textContent="-";document.getElementById("rc-top").textContent="-";
     document.getElementById("rec-table").innerHTML='<div style="color:var(--muted);font-size:.83rem;padding:.25rem">No students registered yet.</div>';
-    document.getElementById("rec-sets").innerHTML='<span class="c-muted">// Add students to see set analysis...</span>';return;
+    return;
   }
   const scores=students.map(s=>s.score);
   document.getElementById("rc-avg").textContent=(scores.reduce((a,b)=>a+b,0)/n).toFixed(1);
   document.getElementById("rc-top").textContent=Math.max(...scores);
   let h='<div class="tbl-wrap"><table><tr><th>ID</th><th>Name</th><th>Age</th><th>Dept</th><th>Score</th><th>Grade</th><th>Remark</th><th></th></tr>';
-  students.forEach((s,i)=>{h+=`<tr><td style="font-family:ui-monospace">${s.id}</td><td>${s.name}</td><td>${s.age}</td><td>${s.dept}</td><td>${s.score}</td><td><span class="badge b${s.grade}">${s.grade}</span></td><td style="color:var(--muted)">${s.remark}</td><td><button class="btn btn-r btn-sm" onclick="delStudent(${i})">Delete</button></td></tr>`;});
-  h+="</table></div>";
+  students.forEach((s,i)=>{
+  h+=`<tr>
+    <td style="font-family:ui-monospace">${s.id}</td>
+    <td>${s.name}</td>
+    <td>${s.age}</td>
+    <td>${s.dept}</td>
+    <td>${s.score}</td>
+    <td><span class="badge b${s.grade}">${s.grade}</span></td>
+    <td style="color:var(--muted)">${s.remark}</td>
+    <td>
+      <button class="btn btn-r btn-sm" onclick="delStudent(${i})">
+        Delete
+      </button>
+    </td>
+  </tr>`;
+});
+
+h += "</table></div>";
+
+document.getElementById("rec-table").innerHTML = h;
 }
 function delStudent(i){const sid=students[i]?.id;if(!sid)return;students.splice(i,1);delete courses[sid];saveDB();renderRecords();doSearch();runAnalytics();updateDash();toast("Student removed and DB updated.");}
 
