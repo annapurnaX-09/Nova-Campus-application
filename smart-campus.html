@@ -412,7 +412,7 @@ function addCourse(){
   if(courses[sid].length>=MAX_COURSES){enrollLog.push(`<span class="c-warn">Max ${MAX_COURSES} courses reached for ${sid}.</span>`);renderEnrollLog();renderEnrollTable(sid);saveDB();return;}
   if(!credStr||isNaN(credStr)){enrollLog.push('<span class="c-warn">Invalid credits. Skipping...</span>');renderEnrollLog();saveDB();return;}
   const credits=parseInt(credStr);
-  if(credits<=0||credits>6){enrollLog.push('<span class="c-warn">Credits must be between 1 and 6.</span>');renderEnrollLog();saveDB();return;}
+  if(credits<=0||credits>4){enrollLog.push('<span class="c-warn">Credits must be between 1 and 4.</span>');renderEnrollLog();saveDB();return;}
   if(!cname){enrollLog.push('<span class="c-warn">Course name empty. Skipping...</span>');renderEnrollLog();saveDB();return;}
   courses[sid].push({name:cname,credits});
   enrollLog.push(`<span class="c-blue">OK</span> ${cname} (${credits} cr) added for ${sid} [${courses[sid].length}/${MAX_COURSES}]`);
